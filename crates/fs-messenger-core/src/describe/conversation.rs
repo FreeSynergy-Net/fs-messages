@@ -44,7 +44,7 @@ impl DescribesType for ConversationType {
             on_record(
                 "conversation",
                 "markRead",
-                CommandKind::Change,
+                CommandKind::Other,
                 "Conversation",
             )
             .input(record("upTo", "Message").required()),
