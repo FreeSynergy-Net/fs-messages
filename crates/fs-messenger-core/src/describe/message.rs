@@ -42,16 +42,16 @@ impl DescribesType for MessageType {
                 .input(field("since", BasicType::DateTime))
                 .result(record("items", "Message").multiple()),
             on_record("message", "delete", CommandKind::Delete, "Message"),
-            on_record("message", "flag", CommandKind::Change, "Message")
+            on_record("message", "flag", CommandKind::Other, "Message")
                 .input(yes_no("flagged").required()),
-            on_record("message", "unread", CommandKind::Change, "Message")
+            on_record("message", "unread", CommandKind::Other, "Message")
                 .input(yes_no("unread").required()),
             on_record("message", "forward", CommandKind::Other, "Message")
                 .input(field("recipients", BasicType::Email).required().multiple()),
-            on_record("message", "react", CommandKind::Change, "Message")
+            on_record("message", "react", CommandKind::Other, "Message")
                 .input(text("key"))
                 .unsupported(),
-            on_record("message", "edit", CommandKind::Change, "Message")
+            on_record("message", "edit", CommandKind::Other, "Message")
                 .input(field("text", BasicType::MultilineText).required())
                 .unsupported(),
         ] {

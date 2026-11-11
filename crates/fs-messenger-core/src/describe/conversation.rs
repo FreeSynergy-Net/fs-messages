@@ -48,9 +48,9 @@ impl DescribesType for ConversationType {
                 "Conversation",
             )
             .input(record("upTo", "Message").required()),
-            on_record("conversation", "pin", CommandKind::Change, "Conversation")
+            on_record("conversation", "pin", CommandKind::Other, "Conversation")
                 .input(yes_no("pinned").required()),
-            on_record("conversation", "move", CommandKind::Change, "Conversation")
+            on_record("conversation", "move", CommandKind::Other, "Conversation")
                 .input(text("folder").required()),
             on_record(
                 "conversation",
