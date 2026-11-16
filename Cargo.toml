@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/fs-messenger-core", "crates/fs-messenger-guard", "crates/fs-messenger-mail", "crates/fs-messenger-matrix"]
+members = ["crates/fs-messages-core", "crates/fs-messages-guard", "crates/fs-messages-mail", "crates/fs-messages-matrix"]
 
 [workspace.package]
 version = "0.0.2"

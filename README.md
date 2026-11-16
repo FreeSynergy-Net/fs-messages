@@ -1,4 +1,4 @@
-# FreeSynergy Messenger — say something to someone
+# FreeSynergy Messages — say something to someone
 
 **One place for mail, chat and agents, and a message that is only sent if it can be sent encrypted.**
 
@@ -13,9 +13,9 @@ Latest tag: `v0.0.2`.
 - A message model for mail, chat and agents; conversations, paging that does not jump when new mail arrives, unread marks, drafts, search, pin, move, flag, forward.
 - Encrypted-only sending, with a clear refusal naming the recipients that cannot be reached.
 - Messages stored with their original; very large mails leave a visible stub, not a hole.
-- A mail connector (`fs-messenger-mail`): fetch over IMAP or JMAP, send over SMTP or JMAP, OpenPGP with Autocrypt. Tested against a local Stalwart test server only.
-- An AI guard (`fs-messenger-guard`): an invitation for each AI, a release per AI and per kind of action, questions you answer for risky steps, secrets never given to an AI, and an emergency stop.
-- Try the core: `cargo run -p fs-messenger-core --example demo`.
+- A mail connector (`fs-messages-mail`): fetch over IMAP or JMAP, send over SMTP or JMAP, OpenPGP with Autocrypt. Tested against a local Stalwart test server only.
+- An AI guard (`fs-messages-guard`): an invitation for each AI, a release per AI and per kind of action, questions you answer for risky steps, secrets never given to an AI, and an emergency stop.
+- Try the core: `cargo run -p fs-messages-core --example demo`.
 
 ## What is not there yet
 
@@ -33,7 +33,7 @@ Messenger is where you talk, and later where you talk to an AI that works with t
 
 ## For developers
 
-- Workspace crates: `fs-messenger-core` (core, no GUI, no network), `fs-messenger-guard` (the AI guard), `fs-messenger-mail` (the mail connector).
+- Workspace crates: `fs-messages-core` (core, no GUI, no network), `fs-messages-guard` (the AI guard), `fs-messages-mail` (the mail connector).
 - The contract is `messenger.capnp` in [fs-interfaces](https://github.com/FreeSynergy/fs-interfaces) (draft). Messenger owns it.
 - Build and test: `cargo build --workspace` and `cargo test --workspace`. The mail tests need the test servers in `scripts/test-servers`.
 - Design: [DESIGN.md](DESIGN.md); each of the other two crates has its own `DESIGN.md`.

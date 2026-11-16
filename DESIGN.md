@@ -1,7 +1,7 @@
-# fs-messenger – Design
+# fs-messages – Design
 
-`fs-messenger` is one program for mail, chat and agents (ADR 0018, 0054). This repo holds the **program core**
-(`crates/fs-messenger-core`: no GUI, no RPC, no real connectors) and the **AI guard** (`crates/fs-messenger-guard`, its own `DESIGN.md`). A message is an AS2 **`Note`** envelope + content + immutable
+`fs-messages` is one program for mail, chat and agents (ADR 0018, 0054). This repo holds the **program core**
+(`crates/fs-messages-core`: no GUI, no RPC, no real connectors) and the **AI guard** (`crates/fs-messages-guard`, its own `DESIGN.md`). A message is an AS2 **`Note`** envelope + content + immutable
 original (ADR 0020, 0030), stored through `fs-objects`. Frontends never see protocols; connectors plug in as `Provider`s (ADR 0045).
 
 ## State
@@ -25,14 +25,14 @@ Latest tag v0.4.0 (README/DESIGN header corrected 2026-11-08; earlier: 0.2.0 was
 | Encrypted only, incoming: stored and marked with what the provider says; `none`, `transport-only` and `unknown` are never end-to-end; no quarantine | done |
 | Encrypted only, at rest: see "Encryption at rest" | done |
 | Tool calls as stored data: store, update in place, read; engine id and revision; `settled` final; an outside question is `working` | done |
-| Hooks of the guard: `EngineGuard`, `SenderLookup`, `install_guard` (once) and its `GuardPort`, `Provider::stop_turns`, `ToolCallDecision.revision`, `Error::DecisionRefused`, `Error::GuardRefused`, `DecisionProblem`, index `open_call`, announcements beside the store feed. Accounts are transports only (`mail`, `matrix`, `mimi`); there is no account kind `agent`: an AI is a participant on a normal account, and `SenderLookup` says who | done, see `crates/fs-messenger-guard/DESIGN.md` |
+| Hooks of the guard: `EngineGuard`, `SenderLookup`, `install_guard` (once) and its `GuardPort`, `Provider::stop_turns`, `ToolCallDecision.revision`, `Error::DecisionRefused`, `Error::GuardRefused`, `DecisionProblem`, index `open_call`, announcements beside the store feed. Accounts are transports only (`mail`, `matrix`, `mimi`); there is no account kind `agent`: an AI is a participant on a normal account, and `SenderLookup` says who | done, see `crates/fs-messages-guard/DESIGN.md` |
 | What a connector found: `RawMessage.undecrypted` and `signature` (`SignatureCheck`, unset is `notVerified`, and always `notVerified` without a sender or readable content), kept on `MessageSummary` as typed fields, not in the text, mirroring the contract. The fingerprint of a good signature stays with the provider | done |
 | Mail threading: `RawMessage.references`, sender-chosen, newest 64 kept, only link. `Outgoing::references` gives the parent's chain, and a sent message continues it | done |
 | Size limits at ingest and in `record_tool_call`: see "Limits". Over the limit a stub stays (`Ingested::TooLarge`, `MessageSummary.too_large`, 0 = it is not), so the mail is visible, not gone (ADR 0030): aliases, links, sender, date, subject, size, no content. A connector that only holds a cut-off start says so with `RawMessage.too_large`: the core stubs it whatever the limit and never stores those bytes as the original | done, provisional |
 | Large bodies: over 64 KiB in a store object of their own, see "What a large body costs" | done, with a limit named there |
 | An undecrypted message: no ciphertext in preview, name or search; it cannot be forwarded; delivered again under a provider-issued id in readable form it is replaced under the same id, keeping what the person did | done |
 | Tests | 167 against real `TursoStore` (in memory, or temp files where encryption matters); the `Provider` doubles only feed core logic |
-| Guard tests | see `crates/fs-messenger-guard/DESIGN.md` |
+| Guard tests | see `crates/fs-messages-guard/DESIGN.md` |
 
 ### Local only: says so here, and claims nothing more
 
@@ -43,7 +43,7 @@ Flag, read and unread state, pin, folder and delete are this device's own state:
 | What | How it shows |
 |---|---|
 | Edit and react | `Unsupported("message.edit" / "message.react")`, nothing changes: `Provider` has no method to carry them, and a local success would be a claim that nothing reached the other side. Answering them needs a provider method first. Taking a reaction back cannot log AS2 `Undo` with `fs-objects` as it is: `Undo` is state-changing, and it refuses that as a log entry |
-| `MessageAction::Decide` and `Conversation.stop` without an installed guard | `Unsupported("toolcall.decide")`, `Unsupported("turn.stop")`, which is the safe default. With `fs-messenger-guard` installed they go there |
+| `MessageAction::Decide` and `Conversation.stop` without an installed guard | `Unsupported("toolcall.decide")`, `Unsupported("turn.stop")`, which is the safe default. With `fs-messages-guard` installed they go there |
 | Live text (`Event::Text`, `TextChunk`) | the type exists, nothing emits it; `text.stream` reported unsupported |
 | Rules (Sieve) | `Unsupported("rule.read" / "rule.write")` |
 | Scheduled send | a future `at` is `Unsupported("message.schedule")`; the draft is saved, nothing left |
@@ -195,7 +195,7 @@ Contract, for the owner:
 
 Code:
 
-0. The patterns of the guard's core files that are not in coding.md section 2 are listed in `crates/fs-messenger-guard/DESIGN.md`, open point 0. Other modules named `Specification`, `Memento`, `Null Object` or `Command` in the map above were not reviewed in this round.
+0. The patterns of the guard's core files that are not in coding.md section 2 are listed in `crates/fs-messages-guard/DESIGN.md`, open point 0. Other modules named `Specification`, `Memento`, `Null Object` or `Command` in the map above were not reviewed in this round.
 1. **Send is not exactly-once.** A store failure right after a provider accepted answers an error and keeps the draft open, so a retry can send twice. A failed send stays visible, and its retry is a second message.
 2. **Echo race.** A copy fetched while a send is under way, before the receipt is stored, is not recognised and is stored as a second message. Needs a provider-side client id.
 3. **Delete takes two store steps;** a crash in between lets a replay revive it. The store's log keeps the old image, content included, until compaction; the program must call `compact()`, which only removes entries acknowledged by the hub. Since messages do not sync through the hub, nothing acknowledges them yet.

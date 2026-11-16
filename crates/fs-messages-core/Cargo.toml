@@ -1,0 +1,29 @@
+[package]
+name = "fs-messages-core"
+description = "Program core of FreeSynergy.Messenger: one message model over fs-objects, encrypted only, providers as strategies"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[features]
+# Lets tests open a repo on any store, such as a plain in-memory one. Off unless a build asks for it:
+# without it a program cannot name `open` and has only `open_turso`, which asks `is_encrypted`.
+test-support = []
+
+[dependencies]
+fs-objects = { git = "https://github.com/FreeSynergy/fs-objects", tag = "v0.0.1" }
+# The provider rule (ADR 0045): `Capabilities` and `Unsupported`. No generated types in our public API.
+fs-interfaces = { git = "https://github.com/FreeSynergy/fs-interfaces", tag = "v0.0.1" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = { version = "0.4", default-features = false, features = ["std", "clock", "serde"] }
+thiserror = "2"
+async-trait = "0.1"
+tokio = { version = "1", features = ["sync", "rt", "time", "macros"] }
+
+[dev-dependencies]
+# The tests of this crate turn on its own test support.
+fs-messages-core = { path = ".", features = ["test-support"] }
+tokio = { version = "1", features = ["full"] }
+tempfile = "3"
