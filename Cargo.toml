@@ -1,12 +1,24 @@
 [workspace]
 resolver = "2"
-members = ["crates/fs-messages-core", "crates/fs-messages-guard", "crates/fs-messages-mail", "crates/fs-messages-matrix"]
+members = [
+    "crates/fs-messages-core",
+    "crates/fs-messages-guard",
+    "crates/fs-messages-mail",
+    "crates/fs-messages-matrix",
+    "crates/fs-messages-server",
+    "crates/fs-messages-client",
+    "crates/fs-messages-simple",
+    "crates/fs-messages-bin",
+]
 
 [workspace.package]
-version = "0.0.2"
+version = "0.0.3"
 edition = "2024"
 license = "MIT OR Apache-2.0"
-rust-version = "1.85"
+authors = ["FreeSynergy <support@freesynergy.net>"]
+repository = "https://github.com/FreeSynergy/fs-messages"
+# fs-rpc and fs-components need 1.89 (the mail and matrix connectors ask for more and say so themselves).
+rust-version = "1.89"
 
 # Dependencies optimised in debug builds: the invitation-flood test (1000 rooms against a mock server)
 # runs in about 0.5 s in release and ran past its 16 s limit unoptimised.
