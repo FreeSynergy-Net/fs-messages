@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2034
+# (sourced by check.sh, up.sh, down.sh and by tests: every variable is read there, not in this file)
 # Shared settings for the FreeSynergy messenger test servers.
 # Source this file from a shell, or read it from a test, to find the servers.
 #
@@ -33,6 +35,7 @@ FS_MSGTEST_MATRIX_URL=http://$FS_MSGTEST_HOST:$FS_MSGTEST_MATRIX_PORT
 # --- Mail. Log in with the full address. ---
 FS_MSGTEST_MAIL_DOMAIN=msgtest.test
 FS_MSGTEST_MAIL_HOSTNAME=mail.msgtest.test
+# shellcheck disable=SC2209  # `admin` is a plain value, not a command (the Rust tests parse this file without unquoting)
 FS_MSGTEST_MAIL_ADMIN_USER=admin
 FS_MSGTEST_MAIL_ADMIN_PASSWORD=fs-msgtest-throwaway-admin
 FS_MSGTEST_MAIL_USER1=alice@$FS_MSGTEST_MAIL_DOMAIN

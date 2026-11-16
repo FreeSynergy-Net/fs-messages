@@ -9,6 +9,7 @@ here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 pass() { echo "PASS  $*"; }
 fail() { echo "FAIL  $*" >&2; exit 1; }
+# shellcheck disable=SC2154  # rc is set inside the trap text itself
 trap 'rc=$?; [ $rc -eq 0 ] && echo "check.sh: ALL PASSED" || echo "check.sh: FAILED (exit $rc)" >&2' EXIT
 
 nonce=$(date +%s)-$RANDOM$RANDOM
