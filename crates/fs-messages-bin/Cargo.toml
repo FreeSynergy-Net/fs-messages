@@ -1,0 +1,31 @@
+[package]
+name = "fs-messages-bin"
+description = "FreeSynergy Messages: one command for the program. Without words it makes sure the server runs and opens the frontend; `serve` runs the server."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "fs-messages"
+path = "src/main.rs"
+
+[dependencies]
+fs-messages-server = { path = "../fs-messages-server" }
+fs-messages-client = { path = "../fs-messages-client" }
+
+# The frontend `simple` is a package of its own (one deb/rpm per Cargo package, ADR 0094 draft): the program needs it.
+# Both binaries are never in ONE deb (file conflict with the deb of fs-messages-simple).
+[package.metadata.deb]
+name = "fs-messages"
+# cargo-deb replaces only `$auto` in `depends`; so a fixed lower bound, not `${binary:Version}`.
+depends = "$auto, fs-messages-simple (>= 0.0.3)"
+
+# A package with its own generate-rpm table lists its assets itself (fs-release scripts/linux-pkg.sh).
+[package.metadata.generate-rpm]
+name = "fs-messages"
+assets = [{ source = "target/release/fs-messages", dest = "/usr/bin/fs-messages", mode = "755" }]
+[package.metadata.generate-rpm.requires]
+fs-messages-simple = ">= 0.0.3"
