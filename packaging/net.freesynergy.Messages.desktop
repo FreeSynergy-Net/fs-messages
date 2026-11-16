@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=FreeSynergy.Messages
+GenericName=Messages
+Comment=Mail, chat and AI agents in one place, encrypted only
+Exec=fs-messages
+Icon=net.freesynergy.Messages
+Terminal=false
+Categories=Network;Chat;Email;

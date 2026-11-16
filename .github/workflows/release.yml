@@ -1,0 +1,24 @@
+# Release of FreeSynergy Messages on a version tag (fs-release caller, pinned). No tag exists for this state yet.
+name: release
+on:
+  push: { tags: ["v*"] }
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+  packages: write
+jobs:
+  release:
+    uses: FreeSynergy/fs-release/.github/workflows/release.yml@v0.0.10
+    with:
+      # `fs-messages` holds the server (`fs-messages serve`) and the starter; `fs-messages-simple` is the frontend process.
+      binaries: fs-messages,fs-messages-simple
+      cargo-package: fs-messages-bin
+      name: fs-messages
+      kind: app
+      app-id: net.freesynergy.Messages
+      macos: false
+      windows-targets: ""   # Unix sockets and Unix paths for now
+    secrets:
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
