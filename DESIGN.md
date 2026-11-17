@@ -230,9 +230,9 @@ Engine and frontend are separate processes (ADR 0021, ADR 0094 draft). Pattern m
 |---|---|---|
 | `fs-messages-server` | `messenger.capnp` 0.3 over a local socket (`fs-rpc` v0.0.2); answers `capabilities` (no ids, the contract version of the core) and `supportReport`; the rest is `unimplemented` | Adapter |
 | `fs-messages-client` | `Hello::fetch`: handshake (`Control.version`, replace a server that differs), `capabilities`, contract check | Template method |
-| `fs-messages-simple` | frontend `simple`, a process (`[[bin]] fs-messages-simple`); depends only on the client and fs-components v0.0.24; window = name, the icon (embedded PNG), what works today, what comes (all locked, "coming soon") | Adapter, Builder |
+| `fs-messages-simple` | frontend `simple`, a process (`[[bin]] fs-messages-simple`); depends only on the client and fs-components v0.0.25; window = name, the icon (embedded PNG), what works today, what comes (all locked, "coming soon") | Adapter, Builder |
 | `fs-messages-bin` | command `fs-messages`: starter (server, `--check`, fallback to `simple`), `serve`, `--version`, `--help` | Facade, Strategy |
 
 Contract rule (ADR 0094 draft, item 4): same main level, minor level of the server not lower; the number is the core's `CONTRACT_VERSION` (`0.3`), one source. A frontend exits with 3 and a message when it does not fit; the starter says so and opens the standard frontend. Tests: `fs-messages-client/tests/handshake.rs`, `fs-messages-simple/tests/handshake.rs` (real server in a thread, real binary), `fs-messages-bin/src/starter.rs` (fallback decision).
 
-Not done, on purpose: no wiring of the core to the server (the window shows no messages), no lease (the server runs until stopped or replaced), no frontend manifest search at run time (`packaging/frontends/simple.metainfo.xml` is shipped, the starter knows `simple` only). The contract `messenger.capnp` is a draft with no locked trait; a release waits for the strategy's fixed point.
+Not done, on purpose: no wiring of the core to the server (the window shows no messages), no lease (the server runs until stopped or replaced), no frontend manifest search at run time (`packaging/frontends/simple.metainfo.xml` is shipped, the starter knows `simple` only). Contract: draft (`messenger.capnp`, not locked). The basics are released with this draft contract.

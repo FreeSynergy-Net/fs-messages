@@ -8,7 +8,7 @@ What is different here: it is encrypted only. If no way to encrypt a message to 
 
 ## What it can do today
 
-Latest tag: `v0.0.2` (the core only). The version in this tree is `0.0.3`: **no release yet** of the program with a window; this state is not tagged.
+Latest tag: `v0.0.2` (the core only; the tag of 0.0.3 is set at release). The version in this tree is `0.0.3` (program with a window, server and frontend).
 
 - **A window and a server (new in 0.0.3).** `fs-messages` makes sure the server runs and opens the frontend `simple`: the name, the icon, what works today and what comes. Everything that does not work yet says "coming soon"; a missing server or a server that does not fit is said in the window, never a grey window. The window shows no messages yet: the core is not wired to it. Try `fs-messages --version`, `fs-messages --help`.
 
@@ -47,7 +47,7 @@ Messenger is where you talk, and later where you talk to an AI that works with t
 
 **Ein Ort für Mail, Chat und KI-Agenten, und eine Nachricht wird nur gesendet, wenn sie verschlüsselt gesendet werden kann.** FreeSynergy Messages behandelt eine Nachricht als Nachricht, egal welches Netz sie gebracht hat. Es gibt keine Ausnahme vom Verschlüsseln; KI-Agenten sind sichtbare Teilnehmer, keine heimlichen Mitleser, und ein Notaus geht vor allem.
 
-**Was es heute kann.** Letzter Tag `v0.0.2` (nur der Kern). Der Stand in diesem Baum ist `0.0.3`, **noch kein Release** mit Fenster. Der Kern (Nachrichtenmodell, nur verschlüsselt senden, Mail-Anschluss, Matrix-Anschluss als Bibliothek, KI-Wächter) liegt als Bibliothek vor. Neu ist ein Fenster mit Server: `fs-messages` startet den Server und das Frontend `simple` mit Name, Symbol, „Was es heute kann“ und „Was kommt“. Was noch nicht geht, sagt „kommt noch“; fehlt der Server oder passt er nicht, steht das im Fenster. Das Fenster zeigt noch keine Nachrichten, der Kern ist noch nicht daran angeschlossen.
+**Was es heute kann.** Letzter Tag `v0.0.2` (nur der Kern). Der Stand in diesem Baum ist `0.0.3` (Programm mit Fenster, Server und Frontend). Der Kern (Nachrichtenmodell, nur verschlüsselt senden, Mail-Anschluss, Matrix-Anschluss als Bibliothek, KI-Wächter) liegt als Bibliothek vor. Neu ist ein Fenster mit Server: `fs-messages` startet den Server und das Frontend `simple` mit Name, Symbol, „Was es heute kann“ und „Was kommt“. Was noch nicht geht, sagt „kommt noch“; fehlt der Server oder passt er nicht, steht das im Fenster. Das Fenster zeigt noch keine Nachrichten, der Kern ist noch nicht daran angeschlossen.
 
 **Was noch nicht da ist.** Konten im Fenster hinzufügen, Nachrichten lesen und schreiben, Chat-Räume, Benachrichtigungen, KI als Teilnehmer, ein Moderator und ein geschützter Raum (geplant, kein Versprechen). Die vollständige Liste steht in der Feature-Liste (`todo/features/messages.md` in fs-documentation, sobald sie dort liegt).
 

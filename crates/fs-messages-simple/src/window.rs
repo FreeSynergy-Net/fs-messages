@@ -46,7 +46,12 @@ impl Surface for Home {
             Block::Paragraph(Inline::plain(self.tagline.as_str())),
         ])
         .build();
-        let header = div().flex_row().gap(16.0).child(icon).child(heading);
+        let header = div()
+            .flex_row()
+            .items_center()
+            .gap(12.0)
+            .child(icon)
+            .child(heading);
         let body = TextView::new(self.body.clone()).build();
         let page = div().flex_col().gap(12.0).p(24.0);
         Box::new(if self.header {

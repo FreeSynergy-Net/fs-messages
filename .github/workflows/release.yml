@@ -1,4 +1,4 @@
-# Release of FreeSynergy Messages on a version tag (fs-release caller, pinned). No tag exists for this state yet.
+# Release of FreeSynergy Messages on a version tag (fs-release caller, pinned).
 name: release
 on:
   push: { tags: ["v*"] }

@@ -12,6 +12,8 @@ use crate::link::Link;
 pub const TODAY: usize = 3;
 /// See [`TODAY`].
 pub const COMING: usize = 8;
+/// The items that are not decided yet (moderator and protected space, calls): they say "planned, not scheduled" in their own words instead of "coming soon".
+const OPEN: [usize; 2] = [7, 8];
 
 fn say(texts: &Mf2Texts, id: &str, args: &Args) -> String {
     texts.say(&id.into(), args).text().to_owned()
@@ -90,7 +92,14 @@ pub fn coming(texts: &Mf2Texts) -> Vec<Block> {
         },
         list(
             (1..=COMING)
-                .map(|n| format!("{} ({soon})", plain(texts, &format!("coming-{n}"))))
+                .map(|n| {
+                    let said = plain(texts, &format!("coming-{n}"));
+                    if OPEN.contains(&n) {
+                        said
+                    } else {
+                        format!("{said} ({soon})")
+                    }
+                })
                 .collect(),
         ),
     ]
@@ -106,7 +115,7 @@ pub fn blocks(texts: &Mf2Texts, link: &Link) -> Vec<Block> {
 
 #[cfg(test)]
 mod tests {
-    use super::{COMING, TODAY, blocks, plain};
+    use super::{COMING, OPEN, TODAY, blocks, plain};
     use crate::link::Link;
     use crate::words::words;
     use fs_components_words::Locale;
@@ -127,7 +136,8 @@ mod tests {
                 contract: "c".into(),
             },
         ));
-        assert_eq!(said.matches("coming soon").count(), COMING);
+        assert_eq!(said.matches("coming soon").count(), COMING - OPEN.len());
+        assert_eq!(said.matches("not scheduled").count(), OPEN.len());
     }
 
     #[test]
