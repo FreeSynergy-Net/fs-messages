@@ -9,7 +9,7 @@ permissions:
   packages: write
 jobs:
   release:
-    uses: FreeSynergy/fs-release/.github/workflows/release.yml@v0.0.11
+    uses: FreeSynergy/fs-release/.github/workflows/release.yml@v0.0.15
     with:
       # `fs-messages` holds the server (`fs-messages serve`) and the starter; `fs-messages-simple` is the frontend process.
       binaries: fs-messages,fs-messages-simple
