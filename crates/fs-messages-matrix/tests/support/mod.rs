@@ -5,7 +5,7 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::path::Path;
-use std::sync::{Arc, Mutex, OnceLock};
+use std::sync::Arc;
 
 use fs_objects::{Cipher, EncryptionKey, OpenOptions, StaticKeyProvider, TursoStore};
 use tempfile::TempDir;
@@ -49,21 +49,19 @@ pub async fn store_and_folder() -> (Arc<TursoStore>, TempDir) {
     (Arc::new(store), dir)
 }
 
-/// The store of `name`, kept between calls. With `clear`, a new one.
+/// The store of `name`, kept between calls of the same test (its thread). With `clear`, a new one. The stores and their
+/// folders go when the thread of the test ends.
 pub async fn named_store(name: &str, clear: bool) -> Arc<TursoStore> {
-    static STORES: OnceLock<Mutex<HashMap<String, (Arc<TursoStore>, TempDir)>>> = OnceLock::new();
-    let stores = STORES.get_or_init(Mutex::default);
-    if !clear && let Some((store, _)) = stores.lock().unwrap().get(name) {
-        return store.clone();
+    if !clear && let Some(store) = NAMED.with(|n| n.borrow().get(name).map(|(s, _)| s.clone())) {
+        return store;
     }
     let (store, dir) = store_and_folder().await;
-    // A replaced entry drops its folder. The last ones live in this static until the process ends (the macro of
-    // the suite gives no place to drop them, and its tests run on other threads than the one that asks).
-    stores
-        .lock()
-        .unwrap()
-        .insert(name.to_owned(), (store.clone(), dir));
+    NAMED.with(|n| n.borrow_mut().insert(name.to_owned(), (store.clone(), dir)));
     store
+}
+
+thread_local! {
+    static NAMED: RefCell<HashMap<String, (Arc<TursoStore>, TempDir)>> = RefCell::new(HashMap::new());
 }
 
 /// The folder of the store this thread made last (for the test that the folder goes).
